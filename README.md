@@ -1,5 +1,16 @@
 # ClamAV API CG App
 
+## Head Start TTA Use
+
+Branches of this repository:
+
+* `main` - tracks updates from the [upstream repository](https://github.com/18F/clamav-api-cg-app)
+* `dev` - OHS TTA customizations, including our deploy pipeline
+* `ohs-deploy-dev` - Branch that gets auto-deployed to the `ttahub-dev` cloud.gov space
+* `ohs-deploy-prod` - Branch that gets auto-deployed to the `ttahub-prod` cloud.gov space
+
+Any custom work around deployment should branch off of `dev` before being merged and deployed.
+
 ## Why this project
 
 This project aims to create a deployable cloud.gov app that will expose a REST api for scanning files for malware with ClamAV.
