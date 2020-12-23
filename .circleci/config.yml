@@ -1,0 +1,89 @@
+version: 2.1
+orbs:
+  ruby: circleci/ruby@0.1.2
+
+commands:
+  cf_deploy:
+    description: "Login to cloud foundry space with service account credentials
+      and push application using deployment configuration file."
+    parameters:
+      cloudgov_username:
+        description: "Name of CircleCi project environment variable that
+          holds deployer username for cloudgov space"
+        type: env_var_name
+      cloudgov_password:
+        description: "Name of CircleCi project environment variable that
+          holds deployer password for cloudgov space"
+        type: env_var_name
+      cloudgov_space:
+        description: "Name of CircleCi project environment variable that
+          holds name of cloudgov space to target for application deployment"
+        type: env_var_name
+      project:
+        description: "Project name namespacing for cloud.gov routing"
+        type: string
+    steps:
+      - run:
+          name: Login with service account
+          command: |
+            cf login -a << pipeline.parameters.cg_api >> \
+              -u ${<< parameters.cloudgov_username >>} \
+              -p ${<< parameters.cloudgov_password >>} \
+              -o << pipeline.parameters.cg_org >> \
+              -s ${<< parameters.cloudgov_space >>}
+      - run:
+          name: Push application with deployment vars
+          command: cf push --var project=<< parameters.project >>
+
+parameters:
+  cg_org:
+    description: "Cloud Foundry cloud.gov organization name"
+    default: "hhs-acf-ohs-tta"
+    type: string
+  cg_api:
+    description: "URL of Cloud Controller in Cloud Foundry cloud.gov instance"
+    default: "https://api.fr.cloud.gov"
+    type: string
+  prod_git_branch:
+    description: "Name of github branch that will deploy to prod"
+    default: "ohs-deploy-prod"
+    type: string
+  dev_git_branch:
+    description: "Name of github branch that will deploy to dev"
+    default: "ohs-deploy-dev"
+    type: string
+jobs:
+  deploy:
+    docker:
+      - image: circleci/ruby:2.7.2
+    executor: ruby/default
+    steps:
+      - checkout
+      - run:
+          name: Install cloud foundry
+          command: |
+            curl -v -L -o cf-cli_amd64.deb 'https://cli.run.pivotal.io/stable?release=debian64&source=github'
+            sudo dpkg -i cf-cli_amd64.deb
+      - when: # dev
+          condition:
+            equal: [<< pipeline.git.branch >>, << pipeline.parameters.dev_git_branch >>]
+          steps:
+            - cf_deploy:
+                cloudgov_username: CLOUDGOV_DEV_USERNAME
+                cloudgov_password: CLOUDGOV_DEV_PASSWORD
+                cloudgov_space: CLOUDGOV_DEV_SPACE
+                project: ttahub-dev
+      - when: # prod
+          condition:
+            equal: [<< pipeline.git.branch >>, << pipeline.parameters.prod_git_branch >>]
+          steps:
+            - cf_deploy:
+                cloudgov_username: CLOUDGOV_PROD_USERNAME
+                cloudgov_password: CLOUDGOV_PROD_PASSWORD
+                cloudgov_space: CLOUDGOV_PROD_SPACE
+                project: ttahub-prod
+
+workflows:
+  deploy:
+    jobs:
+      - deploy
