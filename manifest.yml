@@ -8,3 +8,5 @@ applications:
     image: ajilaag/clamav-rest:20201028
   routes:
   - route: clamapi-((project)).apps.internal
+  env:
+    MAX_FILE_SIZE: 30M
