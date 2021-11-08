@@ -2,7 +2,7 @@ version: "3.5"
 
 services:
   clamav-server:
-    image: ajilaag/clamav-rest:20201028
+    image: ajilaag/clamav-rest:20211026
     ports:
       - "9443:9443"
     environment:

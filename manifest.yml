@@ -5,7 +5,7 @@ applications:
   memory: 2G
   disk_quota: 2G
   docker:
-    image: ajilaag/clamav-rest:20201028
+    image: ajilaag/clamav-rest:20211026
   routes:
   - route: clamapi-((project)).apps.internal
   env:
