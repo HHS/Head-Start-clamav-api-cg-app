@@ -2,7 +2,7 @@
 applications:
 - name: clamav-api-((project))
   instances: 1
-  memory: 2G
+  memory: 4G
   disk_quota: 2G
   docker:
     image: ajilaag/clamav-rest:20211026
