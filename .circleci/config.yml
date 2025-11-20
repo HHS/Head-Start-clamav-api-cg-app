@@ -22,6 +22,9 @@ commands:
       project:
         description: "Project name namespacing for cloud.gov routing"
         type: string
+      deploy_config_file:
+        description: "Path to deployment configuration file"
+        type: string
     steps:
       - run:
           name: Login with service account
@@ -33,7 +36,10 @@ commands:
               -s ${<< parameters.cloudgov_space >>}
       - run:
           name: Push application with deployment vars
-          command: cf push --var project=<< parameters.project >>
+          command: |
+            cf push \
+              --vars-file "<< parameters.deploy_config_file >>" \
+              --var project=<< parameters.project >>
 
 parameters:
   cg_org:
@@ -72,6 +78,7 @@ jobs:
                 cloudgov_username: CLOUDGOV_DEV_USERNAME
                 cloudgov_password: CLOUDGOV_DEV_PASSWORD
                 cloudgov_space: CLOUDGOV_DEV_SPACE
+                deploy_config_file: deployment_config/dev_vars.yml
                 project: ttahub-dev
       - when: # prod
           condition:
@@ -81,6 +88,7 @@ jobs:
                 cloudgov_username: CLOUDGOV_PROD_USERNAME
                 cloudgov_password: CLOUDGOV_PROD_PASSWORD
                 cloudgov_space: CLOUDGOV_PROD_SPACE
+                deploy_config_file: deployment_config/prod_vars.yml
                 project: ttahub-prod
 
 workflows:
