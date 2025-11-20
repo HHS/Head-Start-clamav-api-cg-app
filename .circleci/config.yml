@@ -38,7 +38,7 @@ commands:
           name: Push application with deployment vars
           command: |
             cf push \
-              --vars-file << parameters.deploy_config_file >> \
+              --vars-file "<< parameters.deploy_config_file >>" \
               --var project=<< parameters.project >>
 
 parameters:
