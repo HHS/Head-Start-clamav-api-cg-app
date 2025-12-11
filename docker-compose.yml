@@ -1,6 +1,6 @@
 services:
   clamav-server:
-    image: ajilaag/clamav-rest:0.1.3
+    image: ajilaag/clamav-rest:latest
     ports:
       - "9443:9443"
     healthcheck:
