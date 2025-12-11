@@ -11,6 +11,7 @@ Branches of this repository:
 
 Any custom work around deployment should branch off of `dev` before being merged and deployed.
 CircleCI pipelines can be found [here](https://app.circleci.com/pipelines/github/HHS/Head-Start-clamav-api-cg-app)
+Push branch to remote, then trigger deploy job targeting dev with your branch.
 
 ## Why this project
 

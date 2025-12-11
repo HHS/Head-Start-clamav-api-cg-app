@@ -42,6 +42,14 @@ commands:
     description: "Login to cloud foundry space with service account credentials
       and push application using deployment configuration file."
     parameters:
+      cg_org:
+        description: "Cloud Foundry cloud.gov organization name"
+        default: "hhs-acf-ohs-tta"
+        type: string
+      cg_api:
+        description: "URL of Cloud Controller in Cloud Foundry cloud.gov instance"
+        default: "https://api.fr.cloud.gov"
+        type: string
       cloudgov_username:
         description: "Name of CircleCi project environment variable that
           holds deployer username for cloudgov space"
@@ -71,20 +79,12 @@ commands:
           command: cf push --var project=<< parameters.project >>
 
 parameters:
-  cg_org:
-    description: "Cloud Foundry cloud.gov organization name"
-    default: "hhs-acf-ohs-tta"
-    type: string
-  cg_api:
-    description: "URL of Cloud Controller in Cloud Foundry cloud.gov instance"
-    default: "https://api.fr.cloud.gov"
+  dev_git_branch:
+    description: "Github branch that will deploy to dev"
+    default: "ohs-deploy-dev"
     type: string
   prod_git_branch:
-    description: "Name of github branch that will deploy to prod"
+    description: "Github branch that will deploy to prod"
     default: "ohs-deploy-prod"
-    type: string
-  dev_git_branch:
-    description: "Name of github branch that will deploy to dev"
-    default: "ohs-deploy-dev"
     type: string
 
