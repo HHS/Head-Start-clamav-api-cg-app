@@ -36,6 +36,7 @@ jobs:
                 cloudgov_password: CLOUDGOV_PROD_PASSWORD
                 cloudgov_space: CLOUDGOV_PROD_SPACE
                 project: ttahub-prod
+            
 
 commands:
   cf_deploy:
@@ -77,6 +78,11 @@ commands:
       - run:
           name: Push application with deployment vars
           command: cf push --var project=<< parameters.project >>
+      - run:
+          name: Get logs
+          when: always
+          command: cf logs clamav-api-<< parameters.project >> --recent
+      
 
 parameters:
   dev_git_branch:
