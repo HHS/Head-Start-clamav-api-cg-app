@@ -12,6 +12,7 @@ Branches of this repository:
 Any custom work around deployment should branch off of `dev` before being merged and deployed.
 CircleCI pipelines can be found [here](https://app.circleci.com/pipelines/github/HHS/Head-Start-clamav-api-cg-app)
 Push branch to remote, then trigger deploy job targeting dev with your branch.
+Merge changes into `dev`, then `ohs-deploy-dev`, then `ohs-deploy-prod`
 
 ## Why this project
 
@@ -21,7 +22,7 @@ It is inspired by, and borrowed heavily from, https://blog.theodo.com/2017/11/im
 
 This manifest now runs a docker image from https://github.com/ajilaag/clamav-rest
 
-## Setup
+## Initial Setup
 
 This project depends on one deployment variable, which is documented in `vars.yml-template`
 
