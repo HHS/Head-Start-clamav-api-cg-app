@@ -2,6 +2,10 @@ version: 2.1
 
 workflows:
   deploy:
+    when: 
+      or:
+        - equal: [<< pipeline.git.branch >>, << pipeline.parameters.dev_git_branch >>]
+        - equal: [<< pipeline.git.branch >>, << pipeline.parameters.prod_git_branch >>]
     jobs:
       - deploy
 
