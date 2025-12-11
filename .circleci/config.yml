@@ -1,6 +1,41 @@
 version: 2.1
-orbs:
-  ruby: circleci/ruby@0.1.2
+
+workflows:
+  deploy:
+    jobs:
+      - deploy
+
+jobs:
+  deploy:
+    docker:
+      - image: cimg/base:stable
+    steps:
+      - checkout
+      - run:
+          name: Install cloud foundry
+          command: |
+            wget -q -O - https://packages.cloudfoundry.org/debian/cli.cloudfoundry.org.key | sudo gpg --dearmor -o /usr/share/keyrings/cli.cloudfoundry.org.gpg
+            echo "deb [signed-by=/usr/share/keyrings/cli.cloudfoundry.org.gpg] https://packages.cloudfoundry.org/debian stable main" | sudo tee /etc/apt/sources.list.d/cloudfoundry-cli.list
+            sudo apt-get update
+            sudo apt-get install cf8-cli
+      - when: # dev
+          condition:
+            equal: [<< pipeline.git.branch >>, << pipeline.parameters.dev_git_branch >>]
+          steps:
+            - cf_deploy:
+                cloudgov_username: CLOUDGOV_DEV_USERNAME
+                cloudgov_password: CLOUDGOV_DEV_PASSWORD
+                cloudgov_space: CLOUDGOV_DEV_SPACE
+                project: ttahub-dev
+      - when: # prod
+          condition:
+            equal: [<< pipeline.git.branch >>, << pipeline.parameters.prod_git_branch >>]
+          steps:
+            - cf_deploy:
+                cloudgov_username: CLOUDGOV_PROD_USERNAME
+                cloudgov_password: CLOUDGOV_PROD_PASSWORD
+                cloudgov_space: CLOUDGOV_PROD_SPACE
+                project: ttahub-prod
 
 commands:
   cf_deploy:
@@ -52,38 +87,4 @@ parameters:
     description: "Name of github branch that will deploy to dev"
     default: "ohs-deploy-dev"
     type: string
-jobs:
-  deploy:
-    docker:
-      - image: circleci/ruby:2.7.2
-    executor: ruby/default
-    steps:
-      - checkout
-      - run:
-          name: Install cloud foundry
-          command: |
-            curl -v -L -o cf-cli_amd64.deb 'https://cli.run.pivotal.io/stable?release=debian64&source=github'
-            sudo dpkg -i cf-cli_amd64.deb
-      - when: # dev
-          condition:
-            equal: [<< pipeline.git.branch >>, << pipeline.parameters.dev_git_branch >>]
-          steps:
-            - cf_deploy:
-                cloudgov_username: CLOUDGOV_DEV_USERNAME
-                cloudgov_password: CLOUDGOV_DEV_PASSWORD
-                cloudgov_space: CLOUDGOV_DEV_SPACE
-                project: ttahub-dev
-      - when: # prod
-          condition:
-            equal: [<< pipeline.git.branch >>, << pipeline.parameters.prod_git_branch >>]
-          steps:
-            - cf_deploy:
-                cloudgov_username: CLOUDGOV_PROD_USERNAME
-                cloudgov_password: CLOUDGOV_PROD_PASSWORD
-                cloudgov_space: CLOUDGOV_PROD_SPACE
-                project: ttahub-prod
 
-workflows:
-  deploy:
-    jobs:
-      - deploy
