@@ -76,7 +76,7 @@ commands:
               -o << parameters.cg_org >> \
               -s ${<< parameters.cloudgov_space >>}
       - run:
-          name: Push application with deployment vars
+          name: Deploy to <<parameters.project>> from << pipeline.git.branch >>
           command: cf push --var project=<< parameters.project >>
       - run:
           name: Get logs
