@@ -10,16 +10,28 @@ Branches of this repository:
 * `ohs-deploy-prod` - Branch that gets auto-deployed to the `ttahub-prod` cloud.gov space
 
 Any custom work around deployment should branch off of `dev` before being merged and deployed.
+CircleCI pipelines can be found [here](https://app.circleci.com/pipelines/github/HHS/Head-Start-clamav-api-cg-app)
+Push branch to remote, then trigger deploy job targeting dev with your branch.
+Merge changes into `dev`, then `ohs-deploy-dev`, then `ohs-deploy-prod`
 
-## Why this project
+## Description
 
 This project aims to create a deployable cloud.gov app that will expose a REST api for scanning files for malware with ClamAV.
 
+This manifest runs a docker image from https://hub.docker.com/r/ajilaag/clamav-rest
+From the project maintained here: https://github.com/ajilaag/clamav-rest
 It is inspired by, and borrowed heavily from, https://blog.theodo.com/2017/11/implement-antivirus-api-10-min/
 
-This manifest now runs a docker image from https://github.com/ajilaag/clamav-rest
+The docker container runs an underlying freshclam service and REST API server.
+ClamAV file definitions will be automatically updated from an upstream server.
 
-## Setup
+## Troubleshooting
+
+*Error code 403 from the ClamAV Content Delivery Network (CDN)*
+This is likely due to running an out-of-date version of the freshclam service.
+Rebuild on the latest docker image and try redeploying the application.
+
+## Initial Setup
 
 This project depends on one deployment variable, which is documented in `vars.yml-template`
 
