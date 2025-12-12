@@ -70,6 +70,9 @@ commands:
       project:
         description: "Project name namespacing for cloud.gov routing"
         type: string
+      deploy_config_file:
+        description: "Path to deployment configuration file"
+        type: string
     steps:
       - run:
           name: Login with service account
@@ -81,7 +84,10 @@ commands:
               -s ${<< parameters.cloudgov_space >>}
       - run:
           name: Deploy to <<parameters.project>> from << pipeline.git.branch >>
-          command: cf push --var project=<< parameters.project >>
+          command: |
+            cf push \
+              --vars-file "<< parameters.deploy_config_file >>" \
+              --var project=<< parameters.project >>
       - run:
           name: Get logs
           when: always
