@@ -5,7 +5,7 @@ applications:
   memory: 4G
   disk_quota: 2G
   docker:
-    image: ajilaag/clamav-rest:latest
+    image: ajilaag/clamav-rest:0.1.3
   routes:
   - route: clamapi-((project)).apps.internal
   health-check-type: http
