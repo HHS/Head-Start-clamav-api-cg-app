@@ -9,9 +9,7 @@ Branches of this repository:
 * `ohs-deploy-dev` - Branch that gets auto-deployed to the `ttahub-dev` cloud.gov space
 * `ohs-deploy-prod` - Branch that gets auto-deployed to the `ttahub-prod` cloud.gov space
 
-Any custom work around deployment should branch off of `dev` before being merged and deployed.
-
-CircleCI pipelines can be found [here](https://app.circleci.com/pipelines/github/HHS/Head-Start-clamav-api-cg-app).  Push branch to remote, then trigger deploy job targeting dev with your branch.  Merge changes into `dev`, then `ohs-deploy-dev`, then `ohs-deploy-prod`
+Any custom work around deployment should branch off of `dev` before being merged and deployed.  After pushing branch to remote, trigger deploy job targeting dev with your branch.  Merge changes into `dev` after approval, merge `dev` into `ohs-deploy-dev`, then into `ohs-deploy-prod`.  CircleCI pipelines can be found [here](https://app.circleci.com/pipelines/github/HHS/Head-Start-clamav-api-cg-app).
 
 ## Description
 
